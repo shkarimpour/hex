@@ -15,22 +15,22 @@ class Record {
 
   factory Record.prefix(int startAddress, Iterable<int> data, int size) {
     if (data.length != size) {
-      data = <int>[...List<int>(size - data.length), ...data];
+      data = <int>[...List<int>.filled(size - data.length, 0), ...data];
 
       startAddress -= data.length - size;
     }
 
-    return Record(startAddress, data);
+    return Record(startAddress, data.toList());
   }
 
   factory Record.suffix(int startAddress, Iterable<int> data, int size) {
     if (data.length != size) {
-      data = <int>[...data, ...List<int>(size - data.length)];
+      data = <int>[...data, ...List<int>.filled(size - data.length, 0)];
 
       startAddress -= data.length - size;
     }
 
-    return Record(startAddress, data);
+    return Record(startAddress, data.toList());
   }
 
   int operator [](int address) {
@@ -79,7 +79,7 @@ class DefaultRecordFormatter implements HexRecordFormatter {
   @override
   final int recordLength;
 
-  String format(Record record, {int fullDataEndAddress}) {
+  String format(Record record, {int? fullDataEndAddress}) {
     if (record.length != recordLength) {
       throw Exception('Record should be of length $recordLength');
     }
